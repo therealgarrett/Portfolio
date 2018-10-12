@@ -37,16 +37,25 @@ def main():
         is_user_turn = get_next_player(is_user_turn)
 
 def print_current_player(is_user_turn):
+    """This function takes bool value and
+    tests to see which users turn it is"""
+
     if is_user_turn == True:
         print "-----------------------------\n" + "It is now the human's turn"
     elif is_user_turn == False:
         print "-----------------------------\n" + "It is now the computer's turn"
 
 def roll_die():
+    """Takes no parameters. Assigns random number
+    between 1 and 6 to numberself. Return number"""
+
     number = random.randint(1,6)
     return number
 
 def take_turn(is_user_turn, COMPUTER_HOLD):
+    """This function tests to see whos turn it it
+    and then simulates a turn within the game"""
+
     human_score = 0
     computer_score = 0
     if is_user_turn == True:
@@ -148,6 +157,9 @@ def take_turn(is_user_turn, COMPUTER_HOLD):
             return computer_score
 
 def report_points(user_total,computer_total):
+    """This function prints out a report of the players's
+    points called from the main function after each round"""
+
     print("\n")
     print("The point totals are now: ")
     user_total = str(user_total)
@@ -158,6 +170,8 @@ def report_points(user_total,computer_total):
     computer_total = int(computer_total)
 
 def get_next_player(is_user_turn):
+    """The function records which player's turn it is"""
+
     if is_user_turn == True:
         is_user_turn = False
         return is_user_turn
