@@ -2,7 +2,7 @@ import random
 import math
 
 def main():
-    GAME_END_POINTS = 10
+    GAME_END_POINTS = 100
     COMPUTER_HOLD = 10
     is_user_turn = True
     print("\n")
