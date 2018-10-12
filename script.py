@@ -2,12 +2,16 @@ import random
 import math
 
 def main():
-    GAME_END_POINTS = 100
+    GAME_END_POINTS = 10
     COMPUTER_HOLD = 10
     is_user_turn = True
     print("\n")
-    print("Welcome to Jeopardy Dice!")
-    print("\n")
+    print("       __                                      __          ____   _          ")
+    print("      / /___   ____   ____   ____ _ _____ ____/ /__  __   / __ \ (_)_____ ___")
+    print(" __  / // _ \ / __ \ / __ \ / __ `// ___// __  // / / /  / / / // // ___// _ |")
+    print("/ /_/ //  __// /_/ // /_/ // /_/ // /   / /_/ // /_/ /  / /_/ // // /__ /  __/")
+    print("\____/ \___/ \____// .___/ \__,_//_/    \__,_/ \__, /  /_____//_/ \___/ \___/ ")
+    print("                  /_/                         /____/                          ")
     user_plcr = 0
     computer_plcr = 0
 
@@ -44,11 +48,20 @@ def take_turn(is_user_turn, COMPUTER_HOLD):
     computer_score = 0
     if is_user_turn == True:
         begin = raw_input("roll? [yn]")
-        if begin == 'y' or begin == 'Y':
-            human_rand = roll_die()
-        elif begin == 'n' or begin == 'N':
-            is_user_turn = False
-            return human_score
+        try:
+            if begin == 'y' or begin == 'Y':
+                human_rand = roll_die()
+            elif begin == 'n' or begin == 'N':
+                is_user_turn = False
+                return human_score
+            else:
+                print("Invalid Input")
+                return take_turn(is_user_turn, COMPUTER_HOLD)
+        except:
+            print("Please enter valid inputs")
+            print(error)
+            return take_turn(is_user_turn, COMPUTER_HOLD)
+
         while human_rand != 1:
             human_score = human_score + human_rand
             if human_score != 0:
@@ -60,11 +73,19 @@ def take_turn(is_user_turn, COMPUTER_HOLD):
                 human_score = int(human_score)
                 again = raw_input("roll again? [yn]")
                 print("\n")
-                if again == 'y' or again == 'Y':
-                    human_rand = roll_die()
-                    continue
-                elif again == 'n' or again == 'N':
-                    is_user_turn = False
+                try:
+                    if again == 'y' or again == 'Y':
+                        human_rand = roll_die()
+                        continue
+                    elif again == 'n' or again == 'N':
+                        is_user_turn = False
+                        break
+                    else:
+                        print("Invalid Inputs")
+                        again = raw_input("roll again? [yn]")
+                except ValueError:
+                    print("Please enter valid inputs")
+                    print(error)
                     break
             else:
                 human_score = 1
