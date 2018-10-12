@@ -15,10 +15,12 @@ def main():
     user_plcr = 0
     computer_plcr = 0
 
+    # while a user has not reached game limit, perform code
     while(user_plcr <= GAME_END_POINTS and computer_plcr <= GAME_END_POINTS):
         print_current_player(is_user_turn)
         user_total = take_turn(is_user_turn,COMPUTER_HOLD)
         user_plcr = user_plcr + user_total
+        # Checks to see if user has reached game limit
         if user_total >= GAME_END_POINTS:
             print("user wins!")
             break
@@ -26,6 +28,7 @@ def main():
         print_current_player(is_user_turn)
         computer_total = take_turn(is_user_turn,COMPUTER_HOLD)
         computer_plcr = computer_plcr + computer_total
+        # Checks to see if computer has reached game limit
         if computer_total >= GAME_END_POINTS:
             print("computer wins!")
             break
@@ -61,9 +64,10 @@ def take_turn(is_user_turn, COMPUTER_HOLD):
             print("Please enter valid inputs")
             print(error)
             return take_turn(is_user_turn, COMPUTER_HOLD)
-
+        # Perform dice rolls as long as user does not roll a 1
         while human_rand != 1:
             human_score = human_score + human_rand
+            # If human score is 0, then the player rolled a 1. Moves to else
             if human_score != 0:
                 human_score = str(human_score)
                 human_rand = str(human_rand)
