@@ -5,6 +5,7 @@ from fractions import gcd
 def main():
     p = input("Enter a prime number: ")
 <<<<<<< HEAD
+<<<<<<< HEAD
     p = int(p)
     q = input("Enter another prime number (Not one you entered above): ")
     q = int(q)
@@ -22,6 +23,8 @@ def main():
         decoded = Decode(encoded,public_key,private_key)
         print ("Decoded Message: " + str(decoded))
 =======
+=======
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
     q = input("Enter another prime number (Not one you entered above): ")
     public_buffer = Find_Public_Key(p,q)
     public_key = public_buffer[0],public_buffer[1]
@@ -36,6 +39,9 @@ def main():
     if tryit == 'y' or tryit == 'Y':
         decoded = Decode(encoded,public_key,private_key)
         print ("Decoded Message: " , decoded)
+<<<<<<< HEAD
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
+=======
 >>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
     elif tryit == 'n' or tryit == 'N':
         return
@@ -54,7 +60,10 @@ def div_alg(a,d):
     return quo,rem
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
 def FME(base,power,mod):
     x = 1
     while 1:
@@ -66,6 +75,9 @@ def FME(base,power,mod):
         base = base * base % mod
     return x
 
+<<<<<<< HEAD
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
+=======
 >>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
 def Euclidean_Alg(m,n):
     while n > 0:
@@ -97,15 +109,21 @@ def Find_Public_Key(p,q):
     m = (p-1) * (q-1)
     e = random.randrange(1,m)
 <<<<<<< HEAD
+<<<<<<< HEAD
     check = math.gcd(e,m)
     while check!=1 and p == e and q == e:
         e = random.randrange(1,m)
         check = math.gcd(e,m)
 =======
+=======
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
     check = gcd(e,m)
     while check!=1 and p == e and q == e:
         e = random.randrange(1,m)
         check = gcd(e,m)
+<<<<<<< HEAD
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
+=======
 >>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
     return (e,n,m)
 
@@ -121,7 +139,11 @@ def Find_Private_Key_d(e,m,n):
     while e > 0:
         temp1 = temp_m/e
 <<<<<<< HEAD
+<<<<<<< HEAD
         temp2 = temp_m - (temp1 * e)
+=======
+        temp2 = temp_m - temp1 * e
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
 =======
         temp2 = temp_m - temp1 * e
 >>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
@@ -153,12 +175,18 @@ def Encode(s,public):
 
 def Decode(encoded,public,private):
 <<<<<<< HEAD
+<<<<<<< HEAD
     decrypted = [chr((i**private[0])%public[1]) for i in encoded]
 =======
+=======
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
     decrypted=[]
     for i in encoded:
         #decrypted.append(chr((i**private[0])%public[1]))
         decrypted = [chr((i**private[0])%public[1]) for i in encoded]
+<<<<<<< HEAD
+>>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
+=======
 >>>>>>> 4f7e1da88d933c7bbc46d62664b163e48b531a9e
     return ''.join(decrypted)
 
