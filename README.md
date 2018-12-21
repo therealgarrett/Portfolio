@@ -4,7 +4,7 @@
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
-
+![image](https://user-images.githubusercontent.com/34954082/50343674-b0f9fc00-04dc-11e9-8788-9abb8af79833.png)
 ## Getting Started
 
 Download files from Portfolio to get copies of updated projects and allow running on your 
