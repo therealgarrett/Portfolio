@@ -5,8 +5,6 @@
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
 
-![](Portfolio/Screen Shot 2018-12-21 at 4.44.12 AM.png)
-
 ## Getting Started
 
 Download files from Portfolio to get copies of updated projects and allow running on your 
