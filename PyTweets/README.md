@@ -3,7 +3,7 @@
 # PyTweets Readme
 >A Twitter analysis tool.
 
-![](https://img.shields.io/github/issues/detail/last-update/badges/shields/979.svg)
+[![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
 ![image](https://user-images.githubusercontent.com/34954082/50373569-eb739f80-0595-11e9-8e90-5fb94d1892af.png)
