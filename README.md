@@ -30,13 +30,6 @@ $ cd your_dir/file_name.py
 $ python3 file_name.py
 ```
 
-## Release History
-* 0.0.2 
-  * Change: Add Readme.md file
-* 0.0.1
-  * First Release 
-
-
 ## Authors
 **Garrett Lubin** - garrett.lubin@gmail.com
 
