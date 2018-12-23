@@ -47,6 +47,8 @@ $ python3 script.py
 ```
 
 ## Release History
+* 0.0.2
+  * heat_map() updated: Google API replaced with Folium, no watermarks
 * 0.0.1
   * First Release 
 
