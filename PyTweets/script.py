@@ -1,8 +1,5 @@
 import tweepy
-import sys
 import json
-import tweepy
-import pprint
 import inquirer
 import pymysql as db
 import pandas as pd
@@ -10,6 +7,7 @@ import certifi
 import ssl
 import geopy.geocoders
 import matplotlib.pyplot as plt
+import folium
 from config import *
 from geopy.geocoders import Nominatim
 from gmplot import gmplot
@@ -45,7 +43,7 @@ class MyListener(tweepy.StreamListener):
             self.pbar.update(1)
             if 'text' in raw_tweets:
                 # Create and process SQL data
-                tweet_id = raw_tweets["id"]
+                raw_tweets["id"]
                 text = raw_tweets["text"]
                 created_at = parser.parse(raw_tweets["created_at"])
                 screen_name = raw_tweets["user"]["screen_name"]
@@ -126,37 +124,33 @@ def pie_chart(df_P):
     plt.axis('equal')
     plt.tight_layout()
     pie_promt = input("Load pie chart? [yn]")
-    if pie_promt == 'y' or pie_promt == 'Y':
-        print(colored("Loading pie chart ..", "green"))
-        print(colored("Close chart to continue ..", "yellow"))
-        plt.show()
-    elif(pie_promt == 'n' or pie_promt == 'N'):
-        pass
+    print(colored("Loading pie chart ..", "green"))
+    print(colored("Close chart to continue ..", "yellow"))
+    plt.show()
 
-
-def heat_map(df_H1, df_H2):
+    
+def heat_map(df_H, df_len):
     # Create heat map
-    heat_promt = input("Load heat map? [yn]")
-    if heat_promt == 'y' or heat_promt == 'Y':
-        print(colored("Loading heat map ..", "green"))
-        # Bypass for SSL: CERTIFICATE_VERIFY_FAILED
-        ctx = ssl.create_default_context(cafile=certifi.where())
-        geopy.geocoders.options.default_ssl_context = ctx
-        geolocator = Nominatim(timeout=10)
-        coordinates = {'latitude': [], 'longitude': []}
-
-        for i in range(df_H2):
-            location = geolocator.geocode(df_H1["Location"][i])
-            if location:
-                coordinates['latitude'].append(location.latitude)
-                coordinates['longitude'].append(location.longitude)
-        gmap = gmplot.GoogleMapPlotter(30, 0, 3)
-        gmap.heatmap(coordinates['latitude'],
-                     coordinates['longitude'], radius=20)
-        gmap.draw("heatmap.html")
-    elif(heat_promt == 'n' or heat_promt == 'N'):
-        pass
-
+    print(colored("Loading heat map ..", "green"))
+    # Bypass for SSL: CERTIFICATE_VERIFY_FAILED error
+    # import certifi
+    # import ssl
+    ctx = ssl.create_default_context(cafile=certifi.where())
+    geopy.geocoders.options.default_ssl_context = ctx
+    geolocator = Nominatim(timeout=10)
+    mapvar = folium.Map(location=[40,-40], zoom_start=3, tiles="Mapbox Control Room")
+    for i in range(30):
+        location = geolocator.geocode(df_H["Location"][i])
+        if location:
+            feelings = TextBlob(df_H["Text"][i]).sentiment.polarity
+            if feelings > 0:
+                icon = folium.Icon(color='green')
+            elif feelings < 0:
+                icon = folium.Icon(color='red')
+            elif feelings == 0:
+                icon = folium.Icon(color='yellow')
+            folium.Marker(location=[location.latitude,location.longitude],icon=icon).add_to(mapvar)
+    mapvar.save('map.html')
 
 def v_menu(data_main):
     questions = [
