@@ -1,6 +1,3 @@
-from pyzillow.pyzillow import ZillowWrapper
-from pyzillow.pyzillow import GetDeepSearchResults as GetResults
-from pyzillow.pyzillow import GetUpdatedPropertyDetails as GetDetails
 from uszipcode import SearchEngine
 from pprint import pprint
 from bs4 import BeautifulSoup
