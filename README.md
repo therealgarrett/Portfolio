@@ -1,7 +1,7 @@
 # Portfolio Readme
 >A collection of recreational projects and university course work.
 
-[![NPM Version][npm-image]][npm-url]
+![](https://img.shields.io/badge/platform-linux--64%20%7C%20win--32%20%7C%20osx--64%20%7C%20win--64-orange.svg)
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
 ![image](https://user-images.githubusercontent.com/34954082/50343674-b0f9fc00-04dc-11e9-8788-9abb8af79833.png)
