@@ -73,9 +73,11 @@ class MyListener(tweepy.StreamListener):
                 screen_name = rawTweets["user"]["screen_name"]
                 location = rawTweets["user"]["location"]
                 followers_count = rawTweets["user"]["followers_count"]
-                query = "INSERT INTO PyData (screen_name, created_at, location, followers_count, text) VALUES (%s,%s,%s,%s,%s)"
+                query = "INSERT INTO PyData (screen_name, created_at,\
+                    location, followers_count, text) VALUES (%s,%s,%s,%s,%s)"
                 portal_1[1].execute(
-                    query, (screen_name, created_at, location, followers_count, text))
+                    query,
+                    (screen_name, created_at, location, followers_count, text))
                 portal_1[0].commit()
         except BaseException as e:
             # Ignoring emoji tweets for clean output
@@ -89,7 +91,7 @@ class MyListener(tweepy.StreamListener):
             return True
         else:
             self.pbar.close()
-            print(colored("\n" + "Unsaved Total: " + str(self.unsaved), "green"))
+            print(colored("\n"+"Unsaved Total: "+str(self.unsaved), "green"))
             if self.emojis > 0:
                 print(colored("Contained Emojis: " +
                               str(self.emojis) + "\n", "green"))
@@ -153,12 +155,14 @@ def process_data():
     portal_3 = creds()
     cursor = portal_3[0].cursor()
     cursor.execute(
-        "SELECT screen_name, created_at, location, followers_count, text FROM PyData ORDER BY created_at DESC")
+        "SELECT screen_name, created_at, location, followers_count, \
+            text FROM PyData ORDER BY created_at DESC")
     rows = cursor.fetchall()
     # Restruces data into pandas datafram for easy use
     processed = pd.DataFrame([[ij for ij in i] for i in rows])
     processed.rename(columns={0: "Username", 1: "Created at",
-                              2: "Location", 3: "Followers", 4: "Text"}, inplace=True)
+                              2: "Location", 3: "Followers",
+                              4: "Text"}, inplace=True)
     return processed
 
 
@@ -205,7 +209,8 @@ def pie_chart(pie_data):
     positive = percentage(positive, pie_count)
     negative = percentage(negative, pie_count)
     neutral = percentage(neutral, pie_count)
-    labels = ["Positive [" + str(round(positive)) + "%]", "Negative [" + str(round(negative)) + "%]",
+    labels = ["Positive [" + str(round(positive)) + "%]",
+              "Negative [" + str(round(negative)) + "%]",
               "Neutral [" + str(round(neutral)) + "%]"]
     sizes = [positive, negative, neutral]
     colors = ["darkgreen", "red", "gold"]
@@ -231,10 +236,13 @@ def heat_map(heat_data):
     polarity range.
     """
 
-    pol_list, fol_list, fol_count_list, pol_count_list, pol_tots = [], [], [], [], []
+    pol_list, fol_list, fol_count_list, pol_count_list, pol_tots = \
+        [], [], [], [], []
     pol_tot_1, pol_tot_2, pol_tot_3, pol_tot_4, pol_tot_5 = 0, 0, 0, 0, 0
-    fol_count_1, fol_count_2, fol_count_3, fol_count_4, fol_count_5 = 0, 0, 0, 0, 0
-    pol_count_1, pol_count_2, pol_count_3, pol_count_4, pol_count_5 = 0, 0, 0, 0, 0
+    fol_count_1, fol_count_2, fol_count_3 = 0, 0, 0
+    fol_count_4, fol_count_5 = 0, 0
+    pol_count_1, pol_count_2, pol_count_3 = 0, 0, 0
+    pol_count_4, pol_count_5 = 0, 0
     for i in range(len(heat_data)):
         polarity = TextBlob(heat_data["Text"][i]).sentiment.polarity
         followers = heat_data["Followers"][i]
@@ -284,10 +292,10 @@ def heat_map(heat_data):
 
         else:
             pol_count_5 += 1
-    # create y axis data containing count of followers that fall in each interval
+    # create y axis data containing count of followers in specific interval
     fol_count_list.extend(
         [fol_count_1, fol_count_2, fol_count_3, fol_count_4, fol_count_5])
-    # create x axis data containing count of polarities that fall in each interval
+    # create x axis data containing count of polarities in specific interval
     pol_count_list.extend(
         [pol_count_1, pol_count_2, pol_count_3, pol_count_4, pol_count_5])
     pol_tots.extend([round(pol_tot_1, 2), round(pol_tot_2, 2), round(
@@ -308,7 +316,7 @@ def heat_map(heat_data):
     plt.ylabel("hello")
     plt.ylabel('10,000     10,000     1,000     100     10')
     plt.xlabel(
-        '-2.0             -1.0             0.0             1.0             2.0')
+        '-2.0            -1.0             0.0             1.0             2.0')
     plt.show()
 
 
@@ -497,7 +505,7 @@ def main():
     """
     Calls main_menu()
     """
-    
+
     main_menu()
 
 
