@@ -5,7 +5,7 @@
 
 ![](https://img.shields.io/badge/Version-v1.0.0--beta-orange.svg)
 [![Build Status][travis-image]][travis-url]
-[![Downloads Stats][npm-downloads]][npm-url]
+![](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7-blue.svg)
 ![image](https://user-images.githubusercontent.com/34954082/50721031-30ef9c80-106d-11e9-917f-d381f1d2c9c6.png)
 ## Getting Started
 
