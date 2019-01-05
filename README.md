@@ -1,5 +1,5 @@
 # Portfolio Readme
->A collection of my recreational projects and university course work.
+>A collection of recreational projects and university course work.
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
