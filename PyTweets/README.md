@@ -38,6 +38,20 @@ Install - [MySQL](https://dev.mysql.com/downloads/mysql/)
 
 Install - [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
 
+PyTweets also assumes you have a MySql database set up with the following attributes:
+```
+CREATE TABLE `PyData` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `screen_name` varchar(128) DEFAULT NULL,
+ `created_at` timestamp NULL DEFAULT NULL,
+ `location` varchar(30) DEFAULT NULL,
+ `followers_count` int(10) unsigned DEFAULT NULL,
+ `text` text,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+
+```
+
 
 ## Running the tests
 Save PyTweets into your local environment and run from terminal.
