@@ -1,4 +1,4 @@
-# Portfolio Readme
+# Readme
 >A collection of recreational projects and university course work.
 
 ![](https://img.shields.io/badge/platform-linux--64%20%7C%20win--32%20%7C%20osx--64%20%7C%20win--64-orange.svg)
