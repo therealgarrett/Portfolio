@@ -6,7 +6,7 @@
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
-![image](https://user-images.githubusercontent.com/34954082/50373569-eb739f80-0595-11e9-8e90-5fb94d1892af.png)
+![image](https://user-images.githubusercontent.com/34954082/50721031-30ef9c80-106d-11e9-917f-d381f1d2c9c6.png)
 ## Getting Started
 
 PyTweets is a terminal application that streams tweets for data analysis using Twitter's API. All tweets from this program are processed and stored for later use in a MySQL database. Please read through **Required Packages** for compatability documentation as this will save you time for future deployment to your local machine.
