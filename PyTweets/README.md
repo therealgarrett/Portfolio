@@ -61,6 +61,11 @@ $ python3 script.py
 ```
 
 ## Release History
+* v1.0.0
+  * Official release, ready for demployment 
+  * Some bugs removed
+* v1.0.0-beta
+  * Pre-release
 * 0.1.0
   * Removed some bugs 
 * 0.0.2
