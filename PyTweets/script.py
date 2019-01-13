@@ -33,7 +33,6 @@ class MyListener(tweepy.StreamListener):
     """
 
     def on_connect(self):
-
         """
         Notifies user that Tweepy successfully connected to Twitterself.
         """
@@ -41,7 +40,6 @@ class MyListener(tweepy.StreamListener):
         print(colored("Successfully connected to Twitter", "green"))
 
     def __init__(self, api=None):
-
         """
         Sets and organizes defult values for variables exclusive to the
         MyListerner class.
@@ -54,7 +52,6 @@ class MyListener(tweepy.StreamListener):
         self.emojis = 0
 
     def on_data(self, data):
-
         """
         Here data is streamed, parsed into a JSON format, and then
         delivered to MySQL for later use. Any errors in data will be
@@ -91,7 +88,7 @@ class MyListener(tweepy.StreamListener):
             return True
         else:
             self.pbar.close()
-            print(colored("\n"+"Unsaved Total: "+str(self.unsaved), "green"))
+            print(colored("\n" + "Unsaved Total: " + str(self.unsaved), "green"))
             if self.emojis > 0:
                 print(colored("Contained Emojis: " +
                               str(self.emojis) + "\n", "green"))
@@ -100,9 +97,8 @@ class MyListener(tweepy.StreamListener):
             return False
 
     def on_error(self, status):
-
         """
-        This function reports an errors on Tweepy's connection
+        Reports any errors on Tweepy's connection
         """
 
         print("An error has occured: " + repr(status))
@@ -110,10 +106,8 @@ class MyListener(tweepy.StreamListener):
 
 
 def creds():
-
     """
-    The function connects the user to MySQl and opens a new cursor.
-    The user's log in credentials are required.
+    Connects the user to MySQl and opens a new cursor
     """
 
     cnxt = db.connect(user="root", password="u0bj8dsvs1n",
@@ -125,7 +119,6 @@ def creds():
 
 
 def delete_data():
-
     """
     This function clears MySQL of all data. Usefull for testing
     results in Sentimap().
@@ -147,9 +140,8 @@ def delete_data():
 
 
 def process_data():
-
     """
-    This function creates a dataframe with all relevant Twitter data.
+    Creates the main dataframe using the selected JSON categories
     """
 
     portal_3 = creds()
@@ -167,9 +159,8 @@ def process_data():
 
 
 def data_size():
-
     """
-    This function prints out the number of rows in MySQL.
+    Prints out the number of rows in MySQL
     """
 
     processed = process_data()
@@ -177,19 +168,17 @@ def data_size():
 
 
 def percentage(part, whole):
-
     """
-    This functions calculates the percentage of sentiments in
-    data set.
+    Calculates the percentage of sentiments in
+    data set
     """
 
     return 100 * float(part) / float(whole)
 
 
 def pie_chart(pie_data):
-
     """
-    This function creates a pie chart with sentiment percentages.
+    Creates a pie chart using the percentages per sentiment type
     """
 
     positive = 0
@@ -227,13 +216,12 @@ def pie_chart(pie_data):
 
 
 def heat_map(heat_data):
-
     """
     This function creates a heatmap. The data visualization shown,
     presents the average polarity within each group. The y-axis contains
     the number of users that fall within the inclusive followers range.
     The x-axis contains the number of followers that fall within the inclusive
-    polarity range.
+    polarity range. (May be replaced soon)
     """
 
     pol_list, fol_list, fol_count_list, pol_count_list, pol_tots = \
@@ -321,7 +309,6 @@ def heat_map(heat_data):
 
 
 def senti_map(senti_data):
-
     """
     This function creates a map containing all tweets from
     the users database. Each marker on the map points to the
@@ -373,11 +360,10 @@ def senti_map(senti_data):
         print(colored("Click markers for more details", "green"))
         v_menu()
     except BaseException as e:
-        print(colored("Geocoder Error: %s", "red") % str(e))
+        print(colored("Geocode Error: %s", "red") % str(e))
 
 
 def v_menu():
-
     """
     Generates a menu of available data visualizations
     """
@@ -405,10 +391,9 @@ def v_menu():
 
 
 def main_menu():
-
     """
-    This function authorizes the use of Twitter's API and allows
-    the user to call functions from a menu.
+    Authorizes the use of Twitter's API and allows
+    the user to call main functions from a menu format
     """
 
     consumerKey = "y8js0cEdoYWFT5nQERuEm0fXI"
@@ -426,17 +411,16 @@ def main_menu():
 
     global WORDS
     if answers["Main Menu"] == "New Stream":
-
         WORDS = []
         term = input("Search Term: ")
         WORDS.append(term)
         print("Current List: ", WORDS)
-        go = input("Stream? [yn]")
-        if (go == "y" or go == "Y"):
+        a = input("Stream? [yn]")
+        if a == "y" or a == "Y":
             twitter_stream = Stream(auth, MyListener())
-            twitter_stream.filter(track=WORDS)
+            twitter_stream.filter(languages=["en"], track=WORDS)
             main_menu()
-        elif (go == "n" or go == "N"):
+        elif a == "n" or a == "N":
             main_menu()
 
     elif answers["Main Menu"] == "Add Terms":
@@ -444,34 +428,34 @@ def main_menu():
             pass
         else:
             WORDS = []
-        while(True):
+        while True:
             new_term = input("New Term: ")
             WORDS.append(new_term)
             print("Current List: ", WORDS)
-            go = input("Stream? [yn]")
-            if (go == "y" or go == "Y"):
+            b = input("Stream? [yn]")
+            if b == "y" or b == "Y":
                 twitter_stream = Stream(auth, MyListener())
                 twitter_stream.filter(track=WORDS)
                 main_menu()
-            elif (go == "n" or go == "N"):
+            elif b == "n" or b == "N":
                 print()
                 print("Current List: ", WORDS)
                 print()
                 main_menu()
     elif answers["Main Menu"] == "Stream":
         try:
-            go = input("Stream? [yn]")
-            if (go == "y" or go == "Y"):
+            c = input("Stream? [yn]")
+            if c == "y" or c == "Y":
                 twitter_stream = Stream(auth, MyListener())
                 twitter_stream.filter(track=WORDS)
                 main_menu()
-            elif (go == "n" or go == "N"):
+            elif c == "n" or c == "N":
                 print()
                 print("Current List: ", WORDS)
                 print()
                 main_menu()
         except BaseException as e:
-            print(colored("Error on_data: %s", "red") % str(e))
+            print(colored("Error: %s", "red") % str(e))
             main_menu()
 
     elif answers["Main Menu"] == "Get Words":
@@ -481,8 +465,12 @@ def main_menu():
             print()
             main_menu()
         except BaseException as e:
-            print(colored("Error on_data: %s", "red") % str(e))
-            main_menu()
+            # Catch recursion error
+            if "%s" % str(e):
+                print(colored("Error: %s", "red") % str(e))
+                main_menu()
+            else:
+                sys.exit()
 
     elif answers["Main Menu"] == "SQL Count":
         print()
@@ -492,6 +480,7 @@ def main_menu():
 
     elif answers["Main Menu"] == "SQL Reset":
         delete_data()
+        main_menu()
 
     elif answers["Main Menu"] == "Visualization Menu":
         v_menu()
@@ -501,7 +490,6 @@ def main_menu():
 
 
 def main():
-
     """
     Calls main_menu()
     """
