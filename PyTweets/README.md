@@ -77,7 +77,6 @@ $ python3 script.py
 ## Authors
 **Garrett Lubin** - garrett.lubin@gmail.com
 
-Twitter: [@therealgarrett](https://twitter.com/tharealgarrett) 
 
 
 ## Contributing
