@@ -5,6 +5,7 @@ from uszipcode import SearchEngine
 from uszipcode import SearchEngine
 from pprint import pprint
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 from termcolor import colored
 import sys
 import requests
@@ -12,6 +13,7 @@ import argparse
 import inquirer
 import pymysql as db
 import re
+import csv
 
 
 def request(zipcode, sort):
@@ -33,10 +35,10 @@ def request(zipcode, sort):
                       host="localhost",
                       database="sys",
                       charset="utf8mb4")
-    # lost and found  - 'X1-ZWz1fjckjdd8gb_a2eph'
+    cursor = cnxt.cursor()
+    # lost and found  - 'X1-ZWz1gtmiat11xn_7ew1d'
     # Init api with Zillow access key
     API = ZillowWrapper('X1-ZWz186lbvmr8cr_517ck')
-    cursor = cnxt.cursor()
     content = []
     # init url's
     with requests.Session() as s:
@@ -51,9 +53,27 @@ def request(zipcode, sort):
             print(url)
             r = s.get(url, headers=req_headers, timeout=5)
             soup = BeautifulSoup(r.content, 'lxml')
+
+
+
+
             # get max page number
+
+
+            ## NOTE: Get max page and extract data is broken
+
+
+
+
             max = 0
             for i in soup.find_all("a"):
+                if i.get("aria-label") and i.get("href"):
+                    if(i.get("aria-label")[:4]) == "Page":
+                        if("" in i.get("href")):
+                            print(i.get("aria-label"))
+
+
+            """
                 if i.get('onclick') is not None:
                     try:
                         if i.get('onclick'):
@@ -63,6 +83,8 @@ def request(zipcode, sort):
                                         max = int(j)
                     except IndexError:
                         pass
+            """
+
             hold = url
             print(colored("Examining Zillow ..", 'green'))
             for i in range(1, max):
@@ -72,6 +94,7 @@ def request(zipcode, sort):
                     url = url + str(i) + "_p/"
                 r = s.get(url, headers=req_headers, timeout=5)
                 soup = BeautifulSoup(r.content, 'lxml')
+                # Need to find a better algorithm for accessing info from incomplete data
                 if sort == "cheapest":
                     address_ref = [i.text for i in soup.find_all(
                         'span', {'itemprop': 'address'})]
@@ -87,14 +110,17 @@ def request(zipcode, sort):
                                 print(a)
                                 # Zillow wrapper fails with hashmarks
                                 if "#" not in a:
-                                    response = API.get_deep_search_results(a, z)
+                                    response = API.get_deep_search_results(
+                                        a, z)
                                     result = GetDeepSearchResults(response)
                                     if result.zestimate_amount is not None:
                                         amount = int(result.zestimate_amount)
                                         try:
-                                            prices[j] = "$" + str(format(amount, ','))
+                                            prices[j] = "$" + \
+                                                str(format(amount, ','))
                                         except IndexError:
-                                            prices.insert(j, "$" + str(format(amount, ',')))
+                                            prices.insert(
+                                                j, "$" + str(format(amount, ',')))
 
                                     else:
                                         continue
@@ -115,6 +141,7 @@ def request(zipcode, sort):
                     'span', {'class': 'zsg-photo-card-info'})]
                 address = [i.text for i in soup.find_all(
                     'span', {'itemprop': 'address'})]
+
                 # creates nested list of Zillow listing
                 for j, r in enumerate(prices):
                     content.extend([[prices[j], info[j], address[j]]])
@@ -134,24 +161,36 @@ def request(zipcode, sort):
             print("An error has occured: %s") % str(e)
 
 
-
-
 def truncate():
     cnxt = db.connect(user="root", password="u0bj8dsvs1n",
                       host="localhost",
                       database="sys",
                       charset="utf8mb4")
     cursor = cnxt.cursor()
-    ask = input("Reset PySpider? [yn]")
+    ask = input("Reset MySql? [yn]")
     if ask == "y" or ask == "Y":
-        try:
-            cursor = cnxt.cursor()
-            delete = "truncate PySpider"
-            cursor.execute(delete)
-            remainder = cursor.execute("SELECT * FROM PySpider ")
-            print(colored("Remaining rows: " + str(remainder), "green"))
-        except BaseException as e:
-            print(colored("Error on_data: %s", "red") % str(e))
+        inquire = [
+            inquirer.List("Database",
+                          message="Which Database?",
+                          choices=["PySpider", "PyZillow"],
+                          ),]
+        inquire = inquirer.prompt(inquire)
+        if inquire["Database"] == "PySpider":
+            try:
+                cursor = cnxt.cursor()
+                cursor.execute("truncate PySpider")
+                remainder = cursor.execute("SELECT * FROM PySpider ")
+                print(colored("Remaining rows: " + str(remainder), "green"))
+            except BaseException as e:
+                print(colored("Error on_data: %s", "red") % str(e))
+        elif inquire["Database"] == "PyZillow":
+            try:
+                cursor = cnxt.cursor()
+                cursor.execute("truncate PyZillow")
+                remainder = cursor.execute("SELECT * FROM PyZillow ")
+                print(colored("Remaining rows: " + str(remainder), "green"))
+            except BaseException as e:
+                print(colored("Error on_data: %s", "red") % str(e))
     elif ask == "n" or ask == "N":
         main()
 
@@ -171,8 +210,64 @@ def search():
     target = " ".join(code)
     return target
 
+
 def deep_search():
+    cnxt = db.connect(user="root", password="u0bj8dsvs1n",
+                      host="localhost",
+                      database="sys",
+                      charset="utf8mb4")
+    cursor = cnxt.cursor()
+    cursor.execute("SELECT Address FROM PySpider")
+    data = cursor.fetchall()
+    A = [" ".join(j) for j in [i[0].split()[:-1] for i in data]]
+    Z = [" ".join(j) for j in [i[0].split()[-1:] for i in data]]
+    API = ZillowWrapper('X1-ZWz1gtmiat11xn_7ew1d')
+    progbar = tqdm(total=len(A))
+    for i in range(len(A)):
+        progbar.update(1)
+        try:
+            response = API.get_deep_search_results(A[i], Z[i])
+            result = GetDeepSearchResults(response)
+            zestimate_amount = result.zestimate_amount
+            address = A[i]
+            zipcode = Z[i]
+            home_type = result.home_type
+            home_size =result.home_size
+            property_size = result.property_size
+            bedrooms = result.bedrooms
+            bathrooms = result.bathrooms
+            last_sold_price = result.last_sold_price
+            last_sold_date = result.last_sold_date
+            zestimate_last_updated = result.zestimate_last_updated
+            zestimate_value_change = result.zestimate_value_change
+            zestimate_percentile = result.zestimate_percentile
+            zestimate_valuation_range_high = result.zestimate_valuation_range_high
+            zestimate_valuationRange_low = result.zestimate_valuationRange_low
+            year_built = result.year_built
+            home_detail_link = result.home_detail_link
+
+            query = "INSERT INTO PyZillow (zestimate_amount, address, zipcode, home_type, home_size,\
+            property_size, bedrooms, bathrooms, last_sold_price, last_sold_date,\
+            zestimate_last_updated, zestimate_value_change, zestimate_percentile,\
+            zestimate_valuation_range_high, zestimate_valuationRange_low, year_built,\
+            home_detail_link) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            cursor.execute(
+                query,
+                (zestimate_amount, address, zipcode, home_type, home_size,
+                property_size, bedrooms, bathrooms, last_sold_price, last_sold_date,
+                zestimate_last_updated, zestimate_value_change, zestimate_percentile,
+                zestimate_valuation_range_high, zestimate_valuationRange_low, year_built,
+                home_detail_link))
+            cnxt.commit()
+
+        except:
+            continue
+    progbar.close()
+
+
+
     return
+
 
 def lookup():
     """
@@ -205,7 +300,7 @@ def main():
         inquirer.List("Listings",
                       message="Which option do you need?",
                       choices=["Newest", "Cheapest",
-                               "Zipcode Info", "Truncate", "Quit"],
+                               "Zipcode Info", "Deep Search", "SQL Reset", "Quit"],
                       ),
     ]
     inquire = inquirer.prompt(inquire)
@@ -222,7 +317,10 @@ def main():
     elif inquire["Listings"] == "Zipcode Info":
         lookup()
         main()
-    elif inquire["Listings"] == "Truncate":
+    elif inquire["Listings"] == "Deep Search":
+        deep_search()
+        main()
+    elif inquire["Listings"] == "SQL Reset":
         truncate()
         main()
     elif inquire["Listings"] == "Quit":
