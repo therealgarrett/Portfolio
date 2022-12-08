@@ -9,6 +9,6 @@ textblob==0.15.2
 folium==0.7.0
 termcolor==1.1.0
 config==0.4.0
-certifi==2018.11.29
+certifi==2022.12.7
 inquirer==2.5.1
 python_dateutil==2.7.5
